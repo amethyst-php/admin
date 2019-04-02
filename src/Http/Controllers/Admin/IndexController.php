@@ -75,13 +75,12 @@ class IndexController extends RestController
                 $this->findCachedClasses(base_path('vendor/railken/amethyst-*/src'), DataBuilderContract::class)
             );
 
-        return [
+        return array_merge($amethyst, [
             'discovery' => [
                 'events'        => $events,
                 'data_builders' => $dataBuilders,
-            ],
-            'data' => $amethyst,
-        ];
+            ]
+        ]);
     }
 
     public function findCachedClasses($directory, $subclass)
