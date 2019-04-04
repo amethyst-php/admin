@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Railken\Amethyst\Api\Http\Controllers\RestController;
 use Railken\Amethyst\Contracts\DataBuilderContract;
 use Railken\EloquentMapper\Mapper;
+use Railken\Lem\Attributes;
 
 class IndexController extends RestController
 {
@@ -120,13 +121,7 @@ class IndexController extends RestController
             return [
                 'name'       => $name,
                 'attributes' => app(Arr::get($data, 'manager'))->getAttributes()->map(function ($attribute) {
-                    return [
-                        'name'     => $attribute->getName(),
-                        'type'     => preg_replace('/Attribute$/', '', (new \ReflectionClass($attribute))->getShortName()),
-                        'fillable' => (bool) $attribute->getFillable(),
-                        'required' => (bool) $attribute->getRequired(),
-                        'unique'   => (bool) $attribute->getUnique(),
-                    ];
+                    return $this->retrieveAttribute($attribute);
                 })->toArray(),
                 'relations' => collect(Mapper::relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
                     return [
@@ -137,5 +132,24 @@ class IndexController extends RestController
                 })->values(),
             ];
         });
+    }
+
+    public function retrieveAttribute($attribute)
+    {
+        $params = [
+            'name'     => $attribute->getName(),
+            'type'     => preg_replace('/Attribute$/', '', (new \ReflectionClass($attribute))->getShortName()),
+            'fillable' => (bool) $attribute->getFillable(),
+            'required' => (bool) $attribute->getRequired(),
+            'unique'   => (bool) $attribute->getUnique(),
+        ];
+
+        if ($attribute instanceof Attributes\EnumAttribute) {
+            $params = array_merge($params, [
+                'options' => $attribute->getOptions()
+            ]);
+        }
+
+        return $params;
     }
 }
