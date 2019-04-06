@@ -12,6 +12,7 @@ use Railken\Amethyst\Api\Http\Controllers\RestController;
 use Railken\Amethyst\Contracts\DataBuilderContract;
 use Railken\EloquentMapper\Mapper;
 use Railken\Lem\Attributes;
+use Illuminate\Support\Facades\Lang;
 
 class IndexController extends RestController
 {
@@ -66,17 +67,29 @@ class IndexController extends RestController
 
         foreach (Config::get('amethyst.event-logger.events-loggable') as $class) {
             $events = array_merge(
-                    $events,
-                    $this->findCachedClasses('app', $class)
-                );
+                $events,
+                $this->findCachedClasses('app', $class)
+            );
         }
 
         $dataBuilders = array_merge(
-                $this->findCachedClasses(base_path('app'), DataBuilderContract::class),
-                $this->findCachedClasses(base_path('vendor/railken/amethyst-*/src'), DataBuilderContract::class)
-            );
+            $this->findCachedClasses(base_path('app'), DataBuilderContract::class),
+            $this->findCachedClasses(base_path('vendor/railken/amethyst-*/src'), DataBuilderContract::class)
+        ); 
+
+        $lang = [];
+
+        $helper = new \Railken\Amethyst\Common\Helper();
+
+        foreach ($helper->getPackages() as $packageName) {
+            foreach ($helper->getDataByPackageName($packageName) as $data) {
+                $trans = Lang::get(sprintf('amethyst-%s::%s', $packageName, $data));
+                $lang[$data] = is_array($trans) ? $trans : [];
+            }
+        }
 
         return array_merge($amethyst, [
+            'lang' => $lang,
             'discovery' => [
                 'events'        => $events,
                 'data_builders' => $dataBuilders,
