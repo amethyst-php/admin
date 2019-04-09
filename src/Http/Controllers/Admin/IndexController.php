@@ -141,6 +141,7 @@ class IndexController extends RestController
                         'key'  => $key,
                         'type' => $relation->type,
                         'data' => $helper->getNameDataByModel($relation->model),
+                        'scope' => $relation->scope,
                     ];
                 })->values(),
             ];
