@@ -152,7 +152,7 @@ class IndexController extends RestController
     {
         $params = [
             'name'     => $attribute->getName(),
-            'type'     => preg_replace('/Attribute$/', '', (new \ReflectionClass($attribute))->getShortName()),
+            'type'     => $attribute->getType(),
             'fillable' => (bool) $attribute->getFillable(),
             'required' => (bool) $attribute->getRequired(),
             'unique'   => (bool) $attribute->getUnique(),
@@ -161,6 +161,12 @@ class IndexController extends RestController
         if ($attribute instanceof Attributes\EnumAttribute) {
             $params = array_merge($params, [
                 'options' => $attribute->getOptions()
+            ]);
+        }
+
+        if ($attribute instanceof Attributes\BelongsToAttribute || $attribute instanceof Attributes\MorphToAttribute) {
+            $params = array_merge($params, [
+                'relation' => $attribute->getRelationName()
             ]);
         }
 
