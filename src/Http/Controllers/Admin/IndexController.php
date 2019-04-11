@@ -156,6 +156,7 @@ class IndexController extends RestController
             'fillable' => (bool) $attribute->getFillable(),
             'required' => (bool) $attribute->getRequired(),
             'unique'   => (bool) $attribute->getUnique(),
+            'descriptor' => $attribute->getDescriptor()
         ];
 
         if ($attribute instanceof Attributes\EnumAttribute) {
