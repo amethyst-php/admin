@@ -7,12 +7,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use Railken\Amethyst\Api\Http\Controllers\RestController;
 use Railken\Amethyst\Contracts\DataBuilderContract;
 use Railken\EloquentMapper\Mapper;
 use Railken\Lem\Attributes;
-use Illuminate\Support\Facades\Lang;
 
 class IndexController extends RestController
 {
@@ -75,7 +75,7 @@ class IndexController extends RestController
         $dataBuilders = array_merge(
             $this->findCachedClasses(base_path('app'), DataBuilderContract::class),
             $this->findCachedClasses(base_path('vendor/railken/amethyst-*/src'), DataBuilderContract::class)
-        ); 
+        );
 
         $lang = [];
 
@@ -89,11 +89,11 @@ class IndexController extends RestController
         }
 
         return array_merge($amethyst, [
-            'lang' => $lang,
+            'lang'      => $lang,
             'discovery' => [
                 'events'        => $events,
                 'data_builders' => $dataBuilders,
-            ]
+            ],
         ]);
     }
 
@@ -138,9 +138,9 @@ class IndexController extends RestController
                 })->toArray(),
                 'relations' => collect(Mapper::relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
                     return [
-                        'key'  => $key,
-                        'type' => $relation->type,
-                        'data' => $helper->getNameDataByModel($relation->model),
+                        'key'   => $key,
+                        'type'  => $relation->type,
+                        'data'  => $helper->getNameDataByModel($relation->model),
                         'scope' => $relation->scope,
                     ];
                 })->values(),
@@ -151,23 +151,23 @@ class IndexController extends RestController
     public function retrieveAttribute($attribute)
     {
         $params = [
-            'name'     => $attribute->getName(),
-            'type'     => $attribute->getType(),
-            'fillable' => (bool) $attribute->getFillable(),
-            'required' => (bool) $attribute->getRequired(),
-            'unique'   => (bool) $attribute->getUnique(),
-            'descriptor' => $attribute->getDescriptor()
+            'name'       => $attribute->getName(),
+            'type'       => $attribute->getType(),
+            'fillable'   => (bool) $attribute->getFillable(),
+            'required'   => (bool) $attribute->getRequired(),
+            'unique'     => (bool) $attribute->getUnique(),
+            'descriptor' => $attribute->getDescriptor(),
         ];
 
         if ($attribute instanceof Attributes\EnumAttribute) {
             $params = array_merge($params, [
-                'options' => $attribute->getOptions()
+                'options' => $attribute->getOptions(),
             ]);
         }
 
         if ($attribute instanceof Attributes\BelongsToAttribute || $attribute instanceof Attributes\MorphToAttribute) {
             $params = array_merge($params, [
-                'relation' => $attribute->getRelationName()
+                'relation' => $attribute->getRelationName(),
             ]);
         }
 
