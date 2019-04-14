@@ -144,6 +144,7 @@ class IndexController extends RestController
                         'scope' => $relation->scope,
                     ];
                 })->values(),
+                'descriptor' => app(Arr::get($data, 'manager'))->getDescriptor()
             ];
         });
     }
@@ -156,6 +157,7 @@ class IndexController extends RestController
             'fillable'   => (bool) $attribute->getFillable(),
             'required'   => (bool) $attribute->getRequired(),
             'unique'     => (bool) $attribute->getUnique(),
+            'hidden'   => (bool) $attribute->getHidden(),
             'descriptor' => $attribute->getDescriptor(),
         ];
 
