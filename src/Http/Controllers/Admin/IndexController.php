@@ -13,9 +13,14 @@ use Railken\Amethyst\Api\Http\Controllers\RestController;
 use Railken\Amethyst\Contracts\DataBuilderContract;
 use Railken\EloquentMapper\Mapper;
 use Railken\Lem\Attributes;
+use Railken\Cacheable\CacheableTrait;
+use Railken\Cacheable\CacheableContract;
 
-class IndexController extends RestController
+
+class IndexController extends RestController implements CacheableContract
 {
+    use CacheableTrait;
+    
     public function index(Request $request)
     {
         $user = $request->user('api');
@@ -134,7 +139,7 @@ class IndexController extends RestController
             return [
                 'name'       => $name,
                 'attributes' => app(Arr::get($data, 'manager'))->getAttributes()->map(function ($attribute) {
-                    return $this->retrieveAttribute($attribute);
+                    return $this->retrieveAttributeCached($attribute);
                 })->toArray(),
                 'relations' => collect(Mapper::relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
                     return [
