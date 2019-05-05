@@ -20,7 +20,7 @@ class IndexController extends RestController
     {
         $this->middleware(\Spatie\ResponseCache\Middlewares\CacheResponse::class);
     }
-    
+
     public function index(Request $request)
     {
         $user = $request->user('api');
