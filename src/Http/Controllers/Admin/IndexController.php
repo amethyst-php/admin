@@ -142,12 +142,22 @@ class IndexController extends RestController
                     return $this->retrieveAttribute($attribute);
                 })->toArray(),
                 'relations' => collect(Mapper::relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
-                    return [
+                    $return = [
                         'key'   => $key,
                         'type'  => $relation->type,
                         'data'  => $helper->getNameDataByModel($relation->model),
-                        'scope' => $relation->scope,
+                        'scope' => app('amethyst')->parseScope($relation->model, $relation->scope),
                     ];
+
+                    if ($relation->intermediate) {
+                        $return = array_merge($return, [
+                            'intermediate'  => $helper->getNameDataByModel($relation->intermediate),
+                            'foreignPivotKey' => $relation->foreignPivotKey,
+                            'relatedPivotKey' => $relation->relatedPivotKey
+                        ]);
+                    }
+
+                    return $return;
                 })->values(),
                 'descriptor' => app(Arr::get($data, 'manager'))->getDescriptor(),
             ];
