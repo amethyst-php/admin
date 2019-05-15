@@ -151,9 +151,9 @@ class IndexController extends RestController
 
                     if ($relation->intermediate) {
                         $return = array_merge($return, [
-                            'intermediate'  => $helper->getNameDataByModel($relation->intermediate),
+                            'intermediate'    => $helper->getNameDataByModel($relation->intermediate),
                             'foreignPivotKey' => $relation->foreignPivotKey,
-                            'relatedPivotKey' => $relation->relatedPivotKey
+                            'relatedPivotKey' => $relation->relatedPivotKey,
                         ]);
                     }
 
