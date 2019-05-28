@@ -7,7 +7,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use Railken\Amethyst\Api\Http\Controllers\RestController;
 use Railken\Amethyst\Contracts\DataBuilderContract;
