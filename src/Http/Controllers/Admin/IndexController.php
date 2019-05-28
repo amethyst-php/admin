@@ -88,7 +88,7 @@ class IndexController extends RestController
 
         foreach ($helper->getPackages() as $packageName) {
             foreach ($helper->getDataByPackageName($packageName) as $data) {
-                $trans = Lang::get(sprintf('amethyst-%s::%s', $packageName, $data));
+                $trans = trans(sprintf('amethyst-%s::%s', $packageName, $data));
                 $lang[$data] = is_array($trans) ? $trans : [];
             }
         }
