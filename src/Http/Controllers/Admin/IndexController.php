@@ -22,6 +22,12 @@ class IndexController extends RestController
 
     public function index(Request $request)
     {
+        return $this->retrieveInfoCached();
+    }
+
+    public function retrieveInfo()
+    {
+
         $events = [];
         $dataBuilders = [];
 
