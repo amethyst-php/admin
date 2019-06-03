@@ -22,40 +22,6 @@ class IndexController extends RestController
 
     public function index(Request $request)
     {
-        $user = $request->user('api');
-
-        $endpoints = Collection::make(Route::getRoutes())
-        ->filter(function ($route) use ($user) {
-            $middleware = isset($route->action['middleware']) ? $route->action['middleware'] : null;
-
-            if (!is_array($middleware)) {
-                $middleware = [$middleware];
-            }
-
-            if (!in_array('api', $middleware, true) && !in_array('auth:api', $middleware, true)) {
-                return false;
-            }
-
-            if (in_array('auth:api', $middleware, true) && $user == null) {
-                return false;
-            }
-
-            if (in_array('admin', $middleware, true) && $user->role !== 'admin') {
-                return false;
-            }
-
-            return true;
-        })
-        ->sortBy(function ($route) {
-            return $route->uri;
-        })
-        ->map(function ($route) {
-            return [
-                'methods' => $route->methods,
-                'uri'     => $route->uri !== '/' ? '/'.$route->uri : '/',
-            ];
-        })->values()->toArray();
-
         $events = [];
         $dataBuilders = [];
 
