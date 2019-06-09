@@ -32,26 +32,9 @@ class IndexController extends RestController
         $dataBuilders = [];
 
         $amethyst = ['data' => $this->retrieveData()];
+        /*
+      */
 
-        foreach (Config::get('amethyst.event-logger.models-loggable') as $model) {
-            $events = array_merge($events, [
-                    'eloquent.created: '.$model,
-                    'eloquent.updated: '.$model,
-                    'eloquent.removed: '.$model,
-                ]);
-        }
-
-        foreach (Config::get('amethyst.event-logger.events-loggable') as $class) {
-            $events = array_merge(
-                $events,
-                $this->findCachedClasses('app', $class)
-            );
-        }
-
-        $dataBuilders = array_merge(
-            $this->findCachedClasses(base_path('app'), DataBuilderContract::class),
-            $this->findCachedClasses(base_path('vendor/railken/amethyst-*/src'), DataBuilderContract::class)
-        );
 
         $lang = [];
 
@@ -71,33 +54,6 @@ class IndexController extends RestController
                 'data_builders' => $dataBuilders,
             ],
         ]);
-    }
-
-    public function findCachedClasses($directory, $subclass)
-    {
-        if (!file_exists($directory)) {
-            return [];
-        }
-
-        $key = 'api.info.classes:'.$directory.$subclass;
-
-        $value = Cache::get($key, null);
-
-        if ($value === null) {
-            $value = $this->findClasses($directory, $subclass);
-        }
-
-        Cache::put($key, $value, 60);
-
-        return $value;
-    }
-
-    public function findClasses($directory, $subclass)
-    {
-        $finder = new \Symfony\Component\Finder\Finder();
-        $iter = new \hanneskod\classtools\Iterator\ClassIterator($finder->in($directory));
-
-        return array_keys($iter->type($subclass)->where('isInstantiable')->getClassMap());
     }
 
     public function retrieveData()
