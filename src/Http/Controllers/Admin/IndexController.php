@@ -33,29 +33,26 @@ class IndexController extends RestController
 
         $amethyst = ['data' => $this->retrieveData()];
 
-        foreach (Config::get('amethyst.event-logger.models-loggable') as $model) {
-            $events = array_merge($events, [
-                    'eloquent.created: '.$model,
-                    'eloquent.updated: '.$model,
-                    'eloquent.removed: '.$model,
-                ]);
-        }
-
-        foreach (Config::get('amethyst.event-logger.events-loggable') as $class) {
-            $events = array_merge(
-                $events,
-                $this->findCachedClasses('app', $class)
-            );
-        }
-
-        $dataBuilders = array_merge(
-            $this->findCachedClasses(base_path('app'), DataBuilderContract::class),
-            $this->findCachedClasses(base_path('vendor/railken/amethyst-*/src'), DataBuilderContract::class)
-        );
-
         $lang = [];
 
         $helper = new \Railken\Amethyst\Common\Helper();
+
+        foreach (glob(resource_path('/lang/vendor/*')) as $pathPackage) {
+            $packageName = basename($pathPackage);
+            foreach (glob($pathPackage."/*") as $pathLocale) {
+                if (is_dir($pathLocale)) {
+                    $locale = basename($pathLocale);
+
+                    foreach (glob($pathLocale."/*") as $file) {
+
+                        $data = basename($file, ".php");
+                        $trans = trans(sprintf('%s::%s', $packageName, $data));
+
+                        $lang[$data] = is_array($trans) ? $trans : [];
+                    }
+                }
+            }
+        }
 
         foreach ($helper->getPackages() as $packageName) {
             foreach ($helper->getDataByPackageName($packageName) as $data) {
@@ -63,6 +60,7 @@ class IndexController extends RestController
                 $lang[$data] = is_array($trans) ? $trans : [];
             }
         }
+
 
         return array_merge($amethyst, [
             'lang'      => $lang,
