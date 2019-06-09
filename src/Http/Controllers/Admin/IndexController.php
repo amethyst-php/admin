@@ -32,7 +32,7 @@ class IndexController extends RestController
         $dataBuilders = [];
 
         $amethyst = ['data' => $this->retrieveData()];
-
+        
         $lang = [];
 
         $helper = new \Railken\Amethyst\Common\Helper();
@@ -69,33 +69,6 @@ class IndexController extends RestController
                 'data_builders' => $dataBuilders,
             ],
         ]);
-    }
-
-    public function findCachedClasses($directory, $subclass)
-    {
-        if (!file_exists($directory)) {
-            return [];
-        }
-
-        $key = 'api.info.classes:'.$directory.$subclass;
-
-        $value = Cache::get($key, null);
-
-        if ($value === null) {
-            $value = $this->findClasses($directory, $subclass);
-        }
-
-        Cache::put($key, $value, 60);
-
-        return $value;
-    }
-
-    public function findClasses($directory, $subclass)
-    {
-        $finder = new \Symfony\Component\Finder\Finder();
-        $iter = new \hanneskod\classtools\Iterator\ClassIterator($finder->in($directory));
-
-        return array_keys($iter->type($subclass)->where('isInstantiable')->getClassMap());
     }
 
     public function retrieveData()
