@@ -4,12 +4,7 @@ namespace Railken\Amethyst\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Route;
 use Railken\Amethyst\Api\Http\Controllers\RestController;
-use Railken\Amethyst\Contracts\DataBuilderContract;
 use Railken\EloquentMapper\Mapper;
 use Railken\Lem\Attributes;
 
@@ -27,25 +22,23 @@ class IndexController extends RestController
 
     public function retrieveInfo()
     {
-
         $events = [];
         $dataBuilders = [];
 
         $amethyst = ['data' => $this->retrieveData()];
-        
+
         $lang = [];
 
         $helper = new \Railken\Amethyst\Common\Helper();
 
         foreach (glob(resource_path('/lang/vendor/*')) as $pathPackage) {
             $packageName = basename($pathPackage);
-            foreach (glob($pathPackage."/*") as $pathLocale) {
+            foreach (glob($pathPackage.'/*') as $pathLocale) {
                 if (is_dir($pathLocale)) {
                     $locale = basename($pathLocale);
 
-                    foreach (glob($pathLocale."/*") as $file) {
-
-                        $data = basename($file, ".php");
+                    foreach (glob($pathLocale.'/*') as $file) {
+                        $data = basename($file, '.php');
                         $trans = trans(sprintf('%s::%s', $packageName, $data));
 
                         $lang[$data] = is_array($trans) ? $trans : [];
@@ -60,7 +53,6 @@ class IndexController extends RestController
                 $lang[$data] = is_array($trans) ? $trans : [];
             }
         }
-
 
         return array_merge($amethyst, [
             'lang'      => $lang,
