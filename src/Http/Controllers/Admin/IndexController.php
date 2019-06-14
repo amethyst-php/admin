@@ -5,7 +5,6 @@ namespace Railken\Amethyst\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Railken\Amethyst\Api\Http\Controllers\RestController;
-use Railken\EloquentMapper\Mapper;
 use Railken\Lem\Attributes;
 
 class IndexController extends RestController
@@ -68,7 +67,6 @@ class IndexController extends RestController
         $helper = new \Railken\Amethyst\Common\Helper();
 
         return $helper->getData()->map(function ($data) use ($helper) {
-
             $name = $helper->getNameDataByModel(Arr::get($data, 'model'));
 
             return [
@@ -77,9 +75,8 @@ class IndexController extends RestController
                     return $this->retrieveAttribute($attribute);
                 })->toArray(),
                 'relations' => collect(app('eloquent.mapper')->getFinder()->relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
-
                     $relation = (object) $relation;
-                    
+
                     $return = [
                         'key'   => $relation->key,
                         'type'  => $relation->type,
