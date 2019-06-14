@@ -68,6 +68,7 @@ class IndexController extends RestController
         $helper = new \Railken\Amethyst\Common\Helper();
 
         return $helper->getData()->map(function ($data) use ($helper) {
+
             $name = $helper->getNameDataByModel(Arr::get($data, 'model'));
 
             return [
@@ -75,15 +76,18 @@ class IndexController extends RestController
                 'attributes' => app(Arr::get($data, 'manager'))->getAttributes()->map(function ($attribute) {
                     return $this->retrieveAttribute($attribute);
                 })->toArray(),
-                'relations' => collect(Mapper::relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
+                'relations' => collect(app('eloquent.mapper')->getFinder()->relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
+
+                    $relation = (object) $relation;
+                    
                     $return = [
-                        'key'   => $key,
+                        'key'   => $relation->key,
                         'type'  => $relation->type,
                         'data'  => $helper->getNameDataByModel($relation->model),
                         'scope' => app('amethyst')->parseScope($relation->model, $relation->scope),
                     ];
 
-                    if ($relation->intermediate) {
+                    if (isset($relation->intermediate)) {
                         $return = array_merge($return, [
                             'intermediate'    => $helper->getNameDataByModel($relation->intermediate),
                             'foreignPivotKey' => $relation->foreignPivotKey,
