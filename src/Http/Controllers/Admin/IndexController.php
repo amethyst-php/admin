@@ -1,10 +1,10 @@
 <?php
 
-namespace Railken\Amethyst\Http\Controllers\Admin;
+namespace Amethyst\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Railken\Amethyst\Api\Http\Controllers\RestController;
+use Amethyst\Api\Http\Controllers\RestController;
 use Railken\Lem\Attributes;
 
 class IndexController extends RestController
@@ -28,7 +28,7 @@ class IndexController extends RestController
 
         $lang = [];
 
-        $helper = new \Railken\Amethyst\Common\Helper();
+        $helper = new \Amethyst\Common\Helper();
 
         foreach (glob(resource_path('/lang/vendor/*')) as $pathPackage) {
             $packageName = basename($pathPackage);
@@ -64,7 +64,7 @@ class IndexController extends RestController
 
     public function retrieveData()
     {
-        $helper = new \Railken\Amethyst\Common\Helper();
+        $helper = new \Amethyst\Common\Helper();
 
         return $helper->getData()->map(function ($data) use ($helper) {
             $name = $helper->getNameDataByModel(Arr::get($data, 'model'));

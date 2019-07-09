@@ -1,8 +1,8 @@
 <?php
 
-namespace Railken\Amethyst\Tests\Http\Admin;
+namespace Amethyst\Tests\Http\Admin;
 
-use Railken\Amethyst\Tests\BaseTest;
+use Amethyst\Tests\BaseTest;
 
 class IndexTest extends BaseTest
 {

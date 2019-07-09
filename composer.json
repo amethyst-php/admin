@@ -1,28 +1,28 @@
 {
-    "name": "railken/amethyst-admin",
+    "name": "amethyst/admin",
     "type": "library",
     "keywords": ["laravel", "amethyst", "amethyst-admin", "admin"],
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "railken/amethyst-common": "0.1.*",
-        "railken/amethyst-data-builder": "0.1.*",
-        "railken/amethyst-event-logger": "0.1.*",
+        "amethyst/common": "0.1.*",
+        "amethyst/data-builder": "0.1.*",
+        "amethyst/event-logger": "0.1.*",
         "hanneskod/classtools": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.1",
         "orchestra/testbench": "3.*",
-        "railken/amethyst-foo": "0.1.*"
+        "amethyst/foo": "0.1.*"
     },
     "autoload": {
         "psr-4" : {
-            "Railken\\Amethyst\\" : "src/"
+            "Amethyst\\" : "src/"
         }
     },
     "autoload-dev": {
         "psr-4": { 
-            "Railken\\Amethyst\\Tests\\": "tests/" 
+            "Amethyst\\Tests\\": "tests/" 
         }
     },
     "extra": {
@@ -32,7 +32,7 @@
         },
         "laravel": {
             "providers": [
-                "Railken\\Amethyst\\Providers\\AdminServiceProvider"
+                "Amethyst\\Providers\\AdminServiceProvider"
             ]
         }
     }

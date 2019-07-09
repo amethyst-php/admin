@@ -1,8 +1,8 @@
 <?php
 
-namespace Railken\Amethyst\Providers;
+namespace Amethyst\Providers;
 
-use Railken\Amethyst\Common\CommonServiceProvider;
+use Amethyst\Common\CommonServiceProvider;
 
 class AdminServiceProvider extends CommonServiceProvider
 {
@@ -10,7 +10,7 @@ class AdminServiceProvider extends CommonServiceProvider
     {
         parent::register();
 
-        $this->app->register(\Railken\Amethyst\Providers\DataBuilderServiceProvider::class);
-        $this->app->register(\Railken\Amethyst\Providers\EventLoggerServiceProvider::class);
+        $this->app->register(\Amethyst\Providers\DataBuilderServiceProvider::class);
+        $this->app->register(\Amethyst\Providers\EventLoggerServiceProvider::class);
     }
 }

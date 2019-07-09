@@ -2,7 +2,7 @@
 
 return [
     'enabled'    => true,
-    'controller' => Railken\Amethyst\Http\Controllers\Admin\IndexController::class,
+    'controller' => Amethyst\Http\Controllers\Admin\IndexController::class,
     'router'     => [
         'as'     => '',
         'prefix' => '/',
