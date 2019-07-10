@@ -2,9 +2,9 @@
 
 namespace Amethyst\Http\Controllers\Admin;
 
+use Amethyst\Api\Http\Controllers\RestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Amethyst\Api\Http\Controllers\RestController;
 use Railken\Lem\Attributes;
 
 class IndexController extends RestController
