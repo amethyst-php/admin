@@ -68,11 +68,11 @@ class IndexController extends RestController
 
         return $helper->getData()->map(function ($data) use ($helper) {
             $name = $helper->getNameDataByModel(Arr::get($data, 'model'));
-
+            $manager = app(Arr::get($data, 'manager'));
             return [
                 'name'       => $name,
-                'attributes' => app(Arr::get($data, 'manager'))->getAttributes()->map(function ($attribute) {
-                    return $this->retrieveAttribute($attribute);
+                'attributes' => $manager->getAttributes()->map(function ($attribute) use ($manager) {
+                    return $this->retrieveAttribute($manager, $attribute);
                 })->toArray(),
                 'relations' => collect(app('eloquent.mapper')->getFinder()->relations(Arr::get($data, 'model')))->map(function ($relation, $key) use ($helper) {
                     $relation = (object) $relation;
@@ -99,7 +99,7 @@ class IndexController extends RestController
         })->values()->toArray();
     }
 
-    public function retrieveAttribute($attribute)
+    public function retrieveAttribute($manager, $attribute)
     {
         $params = [
             'name'       => $attribute->getName(),
@@ -108,6 +108,7 @@ class IndexController extends RestController
             'required'   => (bool) $attribute->getRequired(),
             'unique'     => (bool) $attribute->getUnique(),
             'hidden'     => (bool) $attribute->getHidden(),
+            'default'    => $attribute->getDefault($manager->newEntity()),
             'descriptor' => $attribute->getDescriptor(),
         ];
 
