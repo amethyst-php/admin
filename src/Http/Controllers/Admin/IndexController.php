@@ -69,6 +69,7 @@ class IndexController extends RestController
         return $helper->getData()->map(function ($data) use ($helper) {
             $name = $helper->getNameDataByModel(Arr::get($data, 'model'));
             $manager = app(Arr::get($data, 'manager'));
+
             return [
                 'name'       => $name,
                 'attributes' => $manager->getAttributes()->map(function ($attribute) use ($manager) {
