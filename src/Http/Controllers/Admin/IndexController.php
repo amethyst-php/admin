@@ -2,7 +2,7 @@
 
 namespace Amethyst\Http\Controllers\Admin;
 
-use Amethyst\Api\Http\Controllers\RestController;
+use Amethyst\Core\Http\Controllers\RestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Railken\Lem\Attributes;
@@ -28,7 +28,7 @@ class IndexController extends RestController
 
         $lang = [];
 
-        $helper = new \Amethyst\Common\Helper();
+        $helper = new \Amethyst\Core\Helper();
 
         foreach (glob(resource_path('/lang/vendor/*')) as $pathPackage) {
             $packageName = basename($pathPackage);
@@ -64,7 +64,7 @@ class IndexController extends RestController
 
     public function retrieveData()
     {
-        $helper = new \Amethyst\Common\Helper();
+        $helper = new \Amethyst\Core\Helper();
 
         return $helper->getData()->map(function ($data) use ($helper) {
             $name = $helper->getNameDataByModel(Arr::get($data, 'model'));
