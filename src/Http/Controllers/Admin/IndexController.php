@@ -4,8 +4,6 @@ namespace Amethyst\Http\Controllers\Admin;
 
 use Amethyst\Core\Http\Controllers\RestController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Railken\Lem\Attributes;
 
 class IndexController extends RestController
 {
@@ -48,7 +46,7 @@ class IndexController extends RestController
         }
 
         return array_merge($amethyst, [
-            'lang'      => $lang
+            'lang' => $lang,
         ]);
     }
 }
